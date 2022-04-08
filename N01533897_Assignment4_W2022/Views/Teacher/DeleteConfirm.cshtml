@@ -1,0 +1,24 @@
+﻿
+@model N01533897_Assignment4_W2022.Models.Teacher
+
+@{
+    ViewBag.Title = "Delete Teacher";
+}
+
+<nav class="delcancel">
+    <a class="cancelLink" href="/Teacher/Show/@Model.TeacherId">Cancel</a>
+</nav>
+
+<div>
+    <h2>Teacher:</h2>
+    <h3 style="color:red;">@Model.TeacherFname @Model.TeacherLname</h3>
+</div>
+
+<div>
+    <h3>Are you sure you want to delete this teacher permanently?</h3>
+    <small>Note: Information cannot be retrieved again !</small>
+</div>
+
+<form method="POST" action="/Teacher/Delete/@Model.TeacherId">
+    <button class="delbutton">Confirm Delete</button>
+</form>
