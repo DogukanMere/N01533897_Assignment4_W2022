@@ -60,6 +60,8 @@ namespace N01533897_Assignment4_W2022.Controllers
                 string TeacherLname = Result["teacherlname"].ToString();
                 string EmpyloyeeNumber = Result["employeenumber"].ToString();
                 double Salary = Convert.ToDouble(Result["salary"]);
+                DateTime Hiredate = (DateTime)Result["hiredate"];
+                Hiredate = Hiredate.Date;
 
 
                 Teacher NewTeacher = new Teacher();
@@ -67,6 +69,7 @@ namespace N01533897_Assignment4_W2022.Controllers
                 NewTeacher.TeacherFname = TeacherFname;
                 NewTeacher.TeacherLname = TeacherLname;
                 NewTeacher.EmployeeNumber = EmpyloyeeNumber;
+                NewTeacher.Hiredate = Hiredate;
                 NewTeacher.Salary = Salary;
 
 
@@ -122,6 +125,7 @@ namespace N01533897_Assignment4_W2022.Controllers
                 string EmpyloyeeNumber = Result["employeenumber"].ToString();
                 DateTime Hiredate = (DateTime)Result["hiredate"];
                 double Salary = Convert.ToDouble(Result["salary"]);
+                Hiredate = Hiredate.Date;
 
                 NewTeacher.TeacherId = TeacherId;
                 NewTeacher.TeacherFname = TeacherFname;
@@ -214,5 +218,53 @@ namespace N01533897_Assignment4_W2022.Controllers
 
         }
 
+
+        // POST
+        /// <summary>
+        /// Connect to database to update information changed by user
+        /// </summary>
+        /// <param name="id"> Teacher's id whose information is updated</param>
+        /// <param name="TeacherInfo"> Teacher's Firstname, Lastname, Number, Hire date, and salary information with updated values</param>
+        /// <returns>Taking user inputs (update/changes) and update the given data on database</returns>
+        /// <example>
+        /// POST : Teacher/UpdateTeacher/{id}
+        /// POST DATA
+        /// {
+        /// "TeacherTname":"Dana",
+        /// "TeacherTname":"Ford",
+        /// "EmployeeNumber":"T401",
+        /// "HireDate":"2015-10-23",
+        /// "Salary":"71.15"
+        /// }
+        /// </example>
+        [HttpPost]
+        public void UpdateTeacher(int id, [FromBody]Teacher TeacherInfo)
+        {
+            //Create a connection
+            MySqlConnection Connection = School.AccessDatabase();
+
+            //Open the connection between local db and web server
+            Connection.Open();
+
+            //New command - Query for DB
+            MySqlCommand command = Connection.CreateCommand();
+
+            //Write SQL query
+            command.CommandText = "update teachers set teacherfname=@TeacherFname, teacherlname=@TeacherLname, employeenumber=@EmployeeNumber, hiredate=@Hiredate, salary=@Salary where teacherid=@TeacherId";
+
+            command.Parameters.AddWithValue("@TeacherFname", TeacherInfo.TeacherFname);
+            command.Parameters.AddWithValue("@TeacherLname", TeacherInfo.TeacherLname);
+            command.Parameters.AddWithValue("@EmployeeNumber", TeacherInfo.EmployeeNumber);
+            command.Parameters.AddWithValue("@Hiredate", TeacherInfo.Hiredate);
+            command.Parameters.AddWithValue("@Salary", TeacherInfo.Salary);
+            command.Parameters.AddWithValue("@TeacherId", id);
+            command.Prepare();
+
+            //Run the query in db
+            command.ExecuteNonQuery();
+
+            //Close the db connection
+            Connection.Close();
+        }
     }
 }

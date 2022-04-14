@@ -17,11 +17,21 @@ textarea {
 }
 
 .dellist {
-    margin: 4rem auto;
+    max-width: 720px;
+    margin: 4rem 0;
+    position: relative;
+    display: flex;
 }
 
 .dellist a:nth-child(2) {
-    padding-left: 30rem;
+    margin-left: 3.5rem;
+}
+
+.dellist a:last-child {
+    justify-self:flex-start;
+    margin-left: 25rem;
+    color:red;
+
 }
 
 .delcancel{
